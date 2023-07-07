@@ -17,12 +17,18 @@ There is nothing to do.</p>
 <?php
 
 require_once "Constants.php";
+$lastError = error_get_last();
+if (isset($lastError) && array_key_exists('message', $lastError)) {
+    $errorMessage = $lastError["message"];
+} else {
+    $errorMessage = "No error message.";
+}
 
 $message = 'Woops! Da ist ein Fehler bei einmayer.de passiert:' . PHP_EOL .
     'PID: ' . getmypid() . PHP_EOL .
     'Remote Address: ' . $_SERVER['REMOTE_ADDR'] . PHP_EOL .
     'Date: ' . date('c') . PHP_EOL .
-    'Last Error: ' . error_get_last()["message"];
+    'Last Error: ' . $errorMessage;
 
 mail(Constants::WEBMASTER_MAIL,
     'Laufzeitfehler auf ' . Constants::DOMAIN,
